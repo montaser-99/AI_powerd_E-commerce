@@ -1,4 +1,5 @@
 import express from "express";
+import productRouting from "./modules/products/product.routes.js";
 import dotenv from "dotenv";
 import { databaseConnection } from "./config/database.js";
 import cookieParser from "cookie-parser";
