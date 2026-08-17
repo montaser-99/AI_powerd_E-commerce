@@ -182,9 +182,22 @@ export const updateProductSchema = {
 }
 // DELETE PRODUCT SCHEMA
 export const deleteProductSchema = {
-  params: Joi.object({
-    id: objectId.required().messages({
-      "any.required": "Product ID is required",
+    params: Joi.object({
+        id: objectId.required().messages({
+            "any.required": "Product ID is required",
+        }),
     }),
-  }),
 };
+// ACTIVE PRODUCT 
+export const activeProductSchema = {
+    body: Joi.object({
+        status: Joi.string()
+            .valid(...Object.values(ProductStatus))
+            .default(ProductStatus)
+    }),
+    params: Joi.object({
+        id: objectId.required().messages({
+            "any.required": "Product ID is required",
+        }),
+    }),
+}

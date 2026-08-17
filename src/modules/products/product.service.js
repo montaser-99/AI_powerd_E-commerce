@@ -1,3 +1,4 @@
+import { ProductStatus } from "../../enum/product_status.js";
 import ProductModel from "./product.model.js";
 // ADD NEW PRODUCT 
 export const addNewProductService = async (data) => {
@@ -35,5 +36,14 @@ export const deleteProductService = async (productId) => {
     const product = await ProductModel.findByIdAndDelete(productId)
     if (!product) throw new Error("product not found")
     return product
-
+}
+// ACTIVE PRODUCT 
+export const activeProductService = async (productId, status) => {
+    const id = await ProductModel.findById(productId)
+    if (!id) throw new Error("product not found")
+    if (id.status === ProductStatus.AVAILABLE) throw new Error("product is already active")
+    const statusUpdated = await ProductModel.findByIdAndUpdate(id, {
+        status: status
+    }, { new: true })
+    return statusUpdated
 }
