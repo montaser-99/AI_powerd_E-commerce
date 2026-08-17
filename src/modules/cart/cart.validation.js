@@ -38,7 +38,7 @@ export const addCartSchema = {
     }),
 };
 // GET CART
-export const addCartSchema = {
+export const getCartSchema = {
     params: Joi.object({
         userId: objectId.required().messages({
             "any.required": "User ID is required",
@@ -46,3 +46,25 @@ export const addCartSchema = {
         }),
     })
 }; 
+// UPDATE CART QUNATITY 
+export const updateCartQuantitySchema = {
+  params: Joi.object({
+    productId: objectId.required().messages({
+      "any.required": "Product ID is required",
+      "string.pattern.base": "Product ID must be a valid MongoDB ObjectId",
+    }),
+  }),
+
+  body: Joi.object({
+    quantity: Joi.number()
+      .integer()
+      .min(1)
+      .required()
+      .messages({
+        "any.required": "Quantity is required",
+        "number.base": "Quantity must be a number",
+        "number.integer": "Quantity must be an integer",
+        "number.min": "Quantity must be at least 1",
+      }),
+  }),
+};

@@ -1,6 +1,6 @@
 import { internalServerResponse } from "../../response/fail.js"
-import { createdDataResponse, dataFoundResponse ,dataUpdatedResponse,dataDeletedResponse} from "../../response/scuess.js";
-import {addNewCartService, getAllCartService} from "./cart.service.js"
+import { createdDataResponse, dataFoundResponse, dataUpdatedResponse, dataDeletedResponse } from "../../response/scuess.js";
+import { addNewCartService, getAllCartService, updateCartQuantityService } from "./cart.service.js"
 // ADD NEW CART 
 export const addNewCartController = async (request, response) => {
     try {
@@ -27,3 +27,24 @@ export const getAllCartController = async (request, response) => {
     }
 
 }
+// UPDATE CART QUANTITY 
+export const updateCartQuantityController = async (request, response) => {
+    try {
+
+        const userId = request.user._id;
+        const { productId } = request.params;
+        const { quantity } = request.body;
+
+        const cart = await updateCartQuantityService(
+            userId,
+            productId,
+            quantity
+        );
+
+        return dataUpdatedResponse({ response, data: cart, message: "cart" })
+
+    } catch (error) {
+        console.log("❌ ERROR IN UPDATE CART QUANTITY CONTROLLER :", error)
+        return internalServerResponse({ response })
+    }
+};

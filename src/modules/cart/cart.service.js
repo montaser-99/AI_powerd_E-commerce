@@ -20,3 +20,30 @@ export const getAllCartService = async(userId)=>{
     return cart
 
 }
+// UPDATE CART QUANTITY 
+export const updateCartQuantityService = async (
+    userId,
+    productId,
+    quantity
+) => {
+
+    const cart = await CartModel.findOne({ userId });
+
+    if (!cart) {
+        throw new Error("Cart not found");
+    }
+
+    const item = cart.items.find(
+        (item) => item.productId.toString() === productId.toString()
+    );
+
+    if (!item) {
+        throw new Error("Product not found in cart");
+    }
+
+    item.quantity = quantity;
+
+    await cart.save();
+
+    return cart;
+};
