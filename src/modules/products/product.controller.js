@@ -1,6 +1,6 @@
 import { internalServerResponse } from "../../response/fail.js"
 import { createdDataResponse, dataFoundResponse ,dataUpdatedResponse,dataDeletedResponse} from "../../response/scuess.js";
-import { activeProductService, addNewProductService, deleteProductService, getAllProductsService, getProductDetailService ,updateProductService} from "./product.service.js"
+import { activeProductService, addNewProductService, deactiveProductService, deleteProductService, getAllProductsService, getProductDetailService ,updateProductService} from "./product.service.js"
 // ADD NEW PRODUCT 
 export const addNewProductController = async (request, response) => {
     try {
@@ -79,6 +79,19 @@ export const activeProductController = async (request, response) => {
     }
     catch (error) {
         console.log("❌ ERROR IN ACTIVE PRODUCT CONTROLLER :", error)
+        return internalServerResponse({ response })
+    }
+}
+//  DEACTIVE PRODUCT
+export const deactiveProductController = async (request, response) => {
+    try {
+        const productId = request.params.id;
+        const data = request.body.status;
+        const products = await deactiveProductService(productId,data);
+        return dataUpdatedResponse({ response, data: products, message: "product" })
+    }
+    catch (error) {
+        console.log("❌ ERROR IN DEACTIVE PRODUCT CONTROLLER :", error)
         return internalServerResponse({ response })
     }
 }

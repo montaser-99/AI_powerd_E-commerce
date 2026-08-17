@@ -47,3 +47,13 @@ export const activeProductService = async (productId, status) => {
     }, { new: true })
     return statusUpdated
 }
+// DEACTIVE PRODUCT 
+export const deactiveProductService = async (productId, status) => {
+    const id = await ProductModel.findById(productId)
+    if (!id) throw new Error("product not found")
+    if (id.status === ProductStatus.UNAVAILABLE) throw new Error("product is already deactive")
+    const statusUpdated = await ProductModel.findByIdAndUpdate(id, {
+        status: status
+    }, { new: true })
+    return statusUpdated
+}
