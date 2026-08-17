@@ -1,6 +1,6 @@
 import { internalServerResponse } from "../../response/fail.js"
 import { createdDataResponse, dataFoundResponse, dataUpdatedResponse, dataDeletedResponse } from "../../response/scuess.js";
-import { addNewCartService, getAllCartService, updateCartQuantityService } from "./cart.service.js"
+import { addNewCartService, deleteCartItemService, getAllCartService, updateCartQuantityService } from "./cart.service.js"
 // ADD NEW CART 
 export const addNewCartController = async (request, response) => {
     try {
@@ -45,6 +45,25 @@ export const updateCartQuantityController = async (request, response) => {
 
     } catch (error) {
         console.log("❌ ERROR IN UPDATE CART QUANTITY CONTROLLER :", error)
+        return internalServerResponse({ response })
+    }
+};
+// DELETE CART QUANTITY 
+export const deleteCartItemController = async (request, response) => {
+    try {
+
+        const userId = request.user._id;
+        const { productId } = request.params;
+
+        const cart = await deleteCartItemService(
+            userId,
+            productId
+        );
+
+        return dataDeletedResponse({ response, data: cart, message: "cart" })
+
+    } catch (error) {
+        console.log("❌ ERROR IN DELETE CART QUANTITY CONTROLLER :", error)
         return internalServerResponse({ response })
     }
 };

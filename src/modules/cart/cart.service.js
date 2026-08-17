@@ -47,3 +47,24 @@ export const updateCartQuantityService = async (
 
     return cart;
 };
+// DELETE PRODUCT IN CART
+export const deleteCartItemService = async (userId, productId) => {
+
+  const cart = await CartModel.findOneAndUpdate(
+    { userId },
+    {
+      $pull: {
+        items: {
+          productId
+        }
+      }
+    },
+    { new: true }
+  );
+
+  if (!cart) {
+    throw new Error("Cart not found");
+  }
+
+  return cart;
+};

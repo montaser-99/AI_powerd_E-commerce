@@ -68,3 +68,13 @@ export const updateCartQuantitySchema = {
       }),
   }),
 };
+// DELETE PRODUCT IN CART 
+export const deleteCartItemSchema = {
+  params: Joi.object({
+    productId: objectId.required().messages({
+      "any.required": "Product ID is required",
+      "string.pattern.base":
+        "Product ID must be a valid MongoDB ObjectId",
+    }),
+  }),
+};
