@@ -24,8 +24,15 @@ export const getProductDetailService = async (productId) => {
 
 };
 // UPDATE PROUDCT 
-export const updateProductService = async(productId, data) => {
+export const updateProductService = async (productId, data) => {
     const product = await ProductModel.findByIdAndUpdate(productId, data, { new: true })
+    if (!product) throw new Error("product not found")
+    return product
+
+}
+// DELETE PRODUCT 
+export const deleteProductService = async (productId) => {
+    const product = await ProductModel.findByIdAndDelete(productId)
     if (!product) throw new Error("product not found")
     return product
 

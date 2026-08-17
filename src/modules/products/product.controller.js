@@ -1,6 +1,6 @@
 import { internalServerResponse } from "../../response/fail.js"
-import { createdDataResponse, dataFoundResponse ,dataUpdatedResponse} from "../../response/scuess.js";
-import { addNewProductService, getAllProductsService, getProductDetailService ,updateProductService} from "./product.service.js"
+import { createdDataResponse, dataFoundResponse ,dataUpdatedResponse,dataDeletedResponse} from "../../response/scuess.js";
+import { addNewProductService, deleteProductService, getAllProductsService, getProductDetailService ,updateProductService} from "./product.service.js"
 // ADD NEW PRODUCT 
 export const addNewProductController = async (request, response) => {
     try {
@@ -42,7 +42,7 @@ export const getProductDetailController = async (request, response) => {
     }
 
 }
-// GET UPDATE PRODUCTS
+//  UPDATE PRODUCT
 export const updateProductController = async (request, response) => {
     try {
         const productId = request.params.id;
@@ -52,6 +52,19 @@ export const updateProductController = async (request, response) => {
     }
     catch (error) {
         console.log("❌ ERROR IN UPDATE PRODUCT DETAILS CONTROLLER :", error)
+        return internalServerResponse({ response })
+    }
+
+}
+//  DELETE PRODUCT
+export const deleteProductController = async (request, response) => {
+    try {
+        const productId = request.params.id;
+        const products = await deleteProductService(productId);
+        return dataDeletedResponse({ response, data: products, message: "product" })
+    }
+    catch (error) {
+        console.log("❌ ERROR IN DELETE PRODUCT DETAILS CONTROLLER :", error)
         return internalServerResponse({ response })
     }
 
