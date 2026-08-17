@@ -78,3 +78,13 @@ export const deleteCartItemSchema = {
     }),
   }),
 };
+// DELETE CART
+export const deleteCartSchema = {
+  params: Joi.object({
+    cartId: objectId.required().messages({
+      "any.required": "Cart ID is required",
+      "string.pattern.base":
+        "Cart ID must be a valid MongoDB ObjectId",
+    }),
+  }),
+};

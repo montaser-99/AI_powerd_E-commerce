@@ -2,21 +2,21 @@ import CartModel from "./cart.model.js"
 import ProductModel from "../products/product.model.js"
 import UserModel from "../users/user.model.js"
 // ADD NEW CART 
-export const addNewCartService = async(data)=>{
+export const addNewCartService = async (data) => {
     const productId = await ProductModel.findOne({
         items: { $elemMatch: { productId: data.productId } }
     })
-    if(!productId) throw new Error("product not found")
+    if (!productId) throw new Error("product not found")
     const cart = await CartModel.create(data)
     return cart
 
 }
 // GET ALL CARTS 
-export const getAllCartService = async(userId)=>{
+export const getAllCartService = async (userId) => {
     const user = await UserModel.findById(userId)
-    if(!user) throw new Error("user not found")
-    const cart = await CartModel.find().where({userId:user._id})
-    if(!cart) throw new Error("cart not found")
+    if (!user) throw new Error("user not found")
+    const cart = await CartModel.find().where({ userId: user._id })
+    if (!cart) throw new Error("cart not found")
     return cart
 
 }
@@ -50,21 +50,30 @@ export const updateCartQuantityService = async (
 // DELETE PRODUCT IN CART
 export const deleteCartItemService = async (userId, productId) => {
 
-  const cart = await CartModel.findOneAndUpdate(
-    { userId },
-    {
-      $pull: {
-        items: {
-          productId
-        }
-      }
-    },
-    { new: true }
-  );
+    const cart = await CartModel.findOneAndUpdate(
+        { userId },
+        {
+            $pull: {
+                items: {
+                    productId
+                }
+            }
+        },
+        { new: true }
+    );
 
-  if (!cart) {
-    throw new Error("Cart not found");
-  }
+    if (!cart) {
+        throw new Error("Cart not found");
+    }
 
-  return cart;
+    return cart;
 };
+// DELETE CART 
+export const deleteCartService = async (cartId, userId) => {
+    const user = await CartModel.findOne({ userId })
+    if (!user) throw new Error("cart is not allowed for you !")
+    const cart = await CartModel.findByIdAndDelete(cartId)
+    if (!cart) throw new Error("cart not found")
+    return cart
+
+}
