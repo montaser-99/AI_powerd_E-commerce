@@ -23,3 +23,10 @@ export const getProductDetailService = async (productId) => {
     return product
 
 };
+// UPDATE PROUDCT 
+export const updateProductService = async(productId, data) => {
+    const product = await ProductModel.findByIdAndUpdate(productId, data, { new: true })
+    if (!product) throw new Error("product not found")
+    return product
+
+}
