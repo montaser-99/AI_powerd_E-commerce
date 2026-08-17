@@ -16,3 +16,10 @@ export const getAllProductsService = async (page = 1, limit = 10) => {
 
     return products;
 };
+// GET PRODUCTS DETAILS 
+export const getProductDetailService = async (productId) => {
+    const product = await ProductModel.findById(productId)
+    if (!product) throw new Error("product not found");
+    return product
+
+};

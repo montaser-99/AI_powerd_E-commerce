@@ -91,3 +91,11 @@ export const createProductSchema = Joi.object({
       )}`,
     }),
 });
+// GET PRODUCT DETAILS 
+export const getProductDetailSchema = {
+  params: Joi.object({
+    id: objectId.required().messages({
+      "any.required": "Product ID is required",
+    }),
+  }),
+};

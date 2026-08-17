@@ -1,6 +1,6 @@
 import { internalServerResponse } from "../../response/fail.js"
 import { createdDataResponse, dataFoundResponse } from "../../response/scuess.js";
-import { addNewProductService, getAllProductsService } from "./product.service.js"
+import { addNewProductService, getAllProductsService, getProductDetailService } from "./product.service.js"
 // ADD NEW PRODUCT 
 export const addNewProductController = async (request, response) => {
     try {
@@ -25,6 +25,19 @@ export const getAllProductsController = async (request, response) => {
     }
     catch (error) {
         console.log("❌ ERROR IN GET ALL PRODUCTS CONTROLLER :", error)
+        return internalServerResponse({ response })
+    }
+
+}
+// GET PRODUCTS DETAILS
+export const getProductDetailController = async (request, response) => {
+    try {
+        const productId = request.params.id;
+        const products = await getProductDetailService(productId);
+        return dataFoundResponse({ response, data: products, message: "product" })
+    }
+    catch (error) {
+        console.log("❌ ERROR IN GET PRODUCTS DETAILS CONTROLLER :", error)
         return internalServerResponse({ response })
     }
 
