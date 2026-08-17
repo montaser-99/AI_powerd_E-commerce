@@ -4,3 +4,15 @@ export const addNewProductService = async (data) => {
     const product = await ProductModel.create(data)
     return product
 }
+// GET ALL PRODUCTS 
+export const getAllProductsService = async (page = 1, limit = 10) => {
+
+    const skip = (page - 1) * limit;
+
+    const products = await ProductModel
+        .find()
+        .skip(skip)
+        .limit(limit);
+
+    return products;
+};
