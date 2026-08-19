@@ -1,0 +1,196 @@
+{
+  "info": {
+    "_postman_id": "005094f2-f2e1-48d8-bcf4-312d1dd6cca5",
+    "name": "AI_powerd_E-commerce",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "48834063",
+    "_collection_link": "https://go.postman.co/collection/48834063-005094f2-f2e1-48d8-bcf4-312d1dd6cca5?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Product",
+      "item": [
+        {
+          "name": "ADD NEW PRODUCT",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"categoryId\": \"68a5f1c2e4b7a12345678901\",\r\n  \"subcategoryId\": \"68a5f2d3e4b7a12345678902\",\r\n  \"nameAr\": \"تي شيرت قطن مصري\",\r\n  \"nameEn\": \"Egyptian Cotton T-Shirt\",\r\n  \"descriptionAr\": \"تي شيرت مصنوع من القطن المصري عالي الجودة ومناسب للاستخدام اليومي.\",\r\n  \"descriptionEn\": \"High-quality Egyptian cotton T-shirt suitable for everyday use.\",\r\n  \"image\": \"https://example.com/images/egyptian-cotton-tshirt.jpg\",\r\n  \"price\": 750.00,\r\n  \"discountType\": \"percentage\",\r\n  \"discountValue\": 10,\r\n  \"status\": \"available\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:4000/product/add",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "product",
+                "add"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET ALL PRODUCTS",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:4000/product/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "product",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET PRODUCT DETAILS",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:4000/product/6a82d7b55dff55b8402a6d80",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "product",
+                "6a82d7b55dff55b8402a6d80"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "UPDATE PRODUCT",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"price\":900.90\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:4000/product/update/6a82d7b55dff55b8402a6d80",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "product",
+                "update",
+                "6a82d7b55dff55b8402a6d80"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE PRODUCT",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:4000/product/delete/6a82d7b55dff55b8402a6d80",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "product",
+                "delete",
+                "6a82d7b55dff55b8402a6d80"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ACTIVE PRODUCT",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"status\":\"available\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:4000/product/active/6a82e671830b8ec8c9207ddb",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "product",
+                "active",
+                "6a82e671830b8ec8c9207ddb"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DEACTIVE PRODUCT",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"status\":\"unavailable\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:4000/product/deactive/6a82e671830b8ec8c9207ddb",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "4000",
+              "path": [
+                "product",
+                "deactive",
+                "6a82e671830b8ec8c9207ddb"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

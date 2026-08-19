@@ -1,0 +1,30 @@
+{
+  "name": "ai_powerd_e-commerce",
+  "version": "1.0.0",
+  "description": "🎯 Main Goal : website that sell products supported by AI model",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node --watch ./src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/montaser-99/AI_powerd_E-commerce.git"
+  },
+  "keywords": [],
+  "author": "zeyad ahmed",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/montaser-99/AI_powerd_E-commerce/issues"
+  },
+  "homepage": "https://github.com/montaser-99/AI_powerd_E-commerce#readme",
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "joi": "^18.2.3",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.9.2"
+  }
+}
