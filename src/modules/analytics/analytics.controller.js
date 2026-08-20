@@ -1,5 +1,6 @@
 import { internalServerResponse } from "../../response/fail.js";
 import { createdDataResponse, dataFoundResponse } from "../../response/scuess.js";
+import { addNewCartService } from "../cart/cart.service.js";
 import { getAllProductsService } from "../products/product.service.js";
 import { placeOrderService, searchProductsService } from "./analytics.service.js";
 
@@ -46,3 +47,16 @@ export const placeOrderController = async (request, response) => {
         return internalServerResponse({ response })
     }
 };
+// ADDING ITEM IN CART  
+export const addNewCartController = async (request, response) => {
+    try {
+        const data = request.body;
+        const cart = await addNewCartService(data)
+        return createdDataResponse({ response, data: cart, message: "cart" })
+    }
+    catch (error) {
+        console.log("❌ ERROR IN ADDING NEW CART CONTROLLER :", error)
+        return internalServerResponse({ response })
+    }
+
+}
