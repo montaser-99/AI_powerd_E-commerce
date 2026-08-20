@@ -5,6 +5,7 @@ const categorySchema = new mongoose.Schema(
     name_en: { type: String, required: true, trim: true, maxlength: 150 },
     name_ar: { type: String, required: true, trim: true, maxlength: 150 },
     image: { type: String, default: null },
+    image_public_id: { type: String, default: null },
     is_active: { type: Boolean, default: true },
   },
   {

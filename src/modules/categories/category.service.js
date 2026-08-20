@@ -21,7 +21,13 @@ async function getCategory(id) {
   return category;
 }
 
-async function createCategory({ name_en, name_ar, image, is_active }) {
+async function createCategory({
+  name_en,
+  name_ar,
+  image,
+  image_public_id,
+  is_active,
+}) {
   const existing = await Category.findOne({ $or: [{ name_en }, { name_ar }] });
   if (existing) {
     const err = new Error(
@@ -30,11 +36,17 @@ async function createCategory({ name_en, name_ar, image, is_active }) {
     err.statusCode = 409;
     throw err;
   }
-  return Category.create({ name_en, name_ar, image, is_active });
+  return Category.create({
+    name_en,
+    name_ar,
+    image,
+    image_public_id,
+    is_active,
+  });
 }
 
 async function updateCategory(id, updates) {
-  await getCategory(id);
+  const current = await getCategory(id);
 
   if (updates.name_en || updates.name_ar) {
     const duplicate = await Category.findOne({
@@ -53,10 +65,13 @@ async function updateCategory(id, updates) {
     }
   }
 
-  return Category.findByIdAndUpdate(id, updates, {
+  const oldPublicId = current.image_public_id;
+  const updated = await Category.findByIdAndUpdate(id, updates, {
     new: true,
     runValidators: true,
   });
+
+  return { updated, oldPublicId: updates.image_public_id ? oldPublicId : null };
 }
 
 async function deactivateCategory(id) {

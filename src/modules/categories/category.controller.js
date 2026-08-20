@@ -4,6 +4,12 @@ const {
   getPagination,
   buildPaginationMeta,
 } = require('../../utils/pagination');
+const {
+  uploadToCloudinary,
+  deleteFromCloudinary,
+} = require('../../utils/upload');
+
+const { uploadToCloudinary } = require('../../utils/upload');
 
 async function getAllCategories(req, res, next) {
   try {
@@ -40,7 +46,20 @@ async function getCategoryById(req, res, next) {
 
 async function createCategory(req, res, next) {
   try {
-    const category = await categoryService.createCategory(req.body);
+    let image = null;
+    let image_public_id = null;
+
+    if (req.file) {
+      const result = await uploadToCloudinary(req.file.buffer, 'categories');
+      image = result.secure_url;
+      image_public_id = result.public_id;
+    }
+
+    const category = await categoryService.createCategory({
+      ...req.body,
+      image,
+      image_public_id,
+    });
     return success(res, {
       statusCode: 201,
       message: 'Category created successfully',
@@ -53,13 +72,28 @@ async function createCategory(req, res, next) {
 
 async function updateCategory(req, res, next) {
   try {
-    const category = await categoryService.updateCategory(
+    const updates = { ...req.body };
+
+    if (req.file) {
+      const result = await uploadToCloudinary(req.file.buffer, 'categories');
+      updates.image = result.secure_url;
+      updates.image_public_id = result.public_id;
+    }
+
+    const { updated, oldPublicId } = await categoryService.updateCategory(
       req.params.id,
-      req.body,
+      updates,
     );
+
+    if (oldPublicId) {
+      deleteFromCloudinary(oldPublicId).catch((e) =>
+        console.error('Cloudinary cleanup failed:', e.message),
+      );
+    }
+
     return success(res, {
       message: 'Category updated successfully',
-      data: category,
+      data: updated,
     });
   } catch (err) {
     next(err);

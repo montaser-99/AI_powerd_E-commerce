@@ -2,6 +2,7 @@ const express = require('express');
 const authenticate = require('../../middlewares/authenticate');
 const authorize = require('../../middlewares/authorize');
 const validate = require('../../middlewares/validate');
+const { upload } = require('../../utils/upload');
 const {
   createCategorySchema,
   updateCategorySchema,
@@ -24,6 +25,8 @@ router.post(
   '/',
   authenticate,
   authorize('SYSTEM_ADMINISTRATOR'),
+  upload.single('image'),
+  createCategoryRules,
   validate(createCategorySchema, 'body'),
   createCategory,
 );
@@ -32,6 +35,8 @@ router.patch(
   '/:id',
   authenticate,
   authorize('SYSTEM_ADMINISTRATOR'),
+  upload.single('image'),
+  updateCategoryRules,
   validate(idParamSchema, 'params'),
   validate(updateCategorySchema, 'body'),
   updateCategory,

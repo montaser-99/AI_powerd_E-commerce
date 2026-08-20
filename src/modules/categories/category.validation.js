@@ -3,7 +3,6 @@ const Joi = require('joi');
 const createCategorySchema = Joi.object({
   name_en: Joi.string().trim().max(150).required(),
   name_ar: Joi.string().trim().max(150).required(),
-  image: Joi.string().uri().allow(null),
   is_active: Joi.boolean(),
 });
 
