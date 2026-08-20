@@ -8,4 +8,4 @@ cartRouter.get("/:userId",schemaValidate(getCartSchema),getAllCartController)
 cartRouter.patch("/quantity/:productId",schemaValidate(updateCartQuantitySchema),updateCartQuantityController)
 cartRouter.delete("/item/:productId",schemaValidate(deleteCartItemSchema),deleteCartItemController)
 cartRouter.delete("/:cartId",schemaValidate(deleteCartSchema),deleteCartController)
-export default cartRouter;
+export default cartRouter;A
