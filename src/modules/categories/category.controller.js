@@ -1,17 +1,12 @@
-const categoryService = require('./category.service');
-const { success } = require('../../utils/response');
-const {
-  getPagination,
-  buildPaginationMeta,
-} = require('../../utils/pagination');
-const {
+import * as categoryService from './category.service.js';
+import { success, error } from '../../utils/response.js';
+import { getPagination, buildPaginationMeta } from '../../utils/pagination.js';
+import {
   uploadToCloudinary,
   deleteFromCloudinary,
-} = require('../../utils/upload');
+} from '../../utils/upload.js';
 
-const { uploadToCloudinary } = require('../../utils/upload');
-
-async function getAllCategories(req, res, next) {
+export async function getAllCategories(req, res, next) {
   try {
     const { activeOnly } = req.query;
     const { page, limit, skip } = getPagination(req.query);
@@ -32,7 +27,7 @@ async function getAllCategories(req, res, next) {
   }
 }
 
-async function getCategoryById(req, res, next) {
+export async function getCategoryById(req, res, next) {
   try {
     const category = await categoryService.getCategory(req.params.id);
     return success(res, {
@@ -44,7 +39,7 @@ async function getCategoryById(req, res, next) {
   }
 }
 
-async function createCategory(req, res, next) {
+export async function createCategory(req, res, next) {
   try {
     let image = null;
     let image_public_id = null;
@@ -70,7 +65,7 @@ async function createCategory(req, res, next) {
   }
 }
 
-async function updateCategory(req, res, next) {
+export async function updateCategory(req, res, next) {
   try {
     const updates = { ...req.body };
 
@@ -100,7 +95,7 @@ async function updateCategory(req, res, next) {
   }
 }
 
-async function deactivateCategory(req, res, next) {
+export async function deactivateCategory(req, res, next) {
   try {
     const category = await categoryService.deactivateCategory(req.params.id);
     return success(res, {
@@ -112,10 +107,21 @@ async function deactivateCategory(req, res, next) {
   }
 }
 
-module.exports = {
-  getAllCategories,
-  getCategoryById,
-  createCategory,
-  updateCategory,
-  deactivateCategory,
-};
+export async function deleteCategory(req, res, next) {
+  try {
+    const deleted = await categoryService.deleteCategory(req.params.id);
+
+    if (deleted.image_public_id) {
+      deleteFromCloudinary(deleted.image_public_id).catch((e) =>
+        console.error('Cloudinary cleanup failed:', e.message),
+      );
+    }
+
+    return success(res, {
+      message: 'Category deleted successfully',
+      data: null,
+    });
+  } catch (err) {
+    next(err);
+  }
+}

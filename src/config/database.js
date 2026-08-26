@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
-require('dotenv').config();
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 
-async function connectDB() {
+export default async function connectDB() {
   try {
     await mongoose.connect(process.env.MONGO_URI);
     console.log('MongoDB Atlas connected');
@@ -10,5 +10,3 @@ async function connectDB() {
     process.exit(1);
   }
 }
-
-module.exports = connectDB;

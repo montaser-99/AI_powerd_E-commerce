@@ -1,6 +1,6 @@
-const { error } = require('../utils/response');
+import { error } from '../utils/response.js';
 
-function validate(schema, source = 'body') {
+export function validate(schema, source = 'body') {
   return (req, res, next) => {
     const { error: validationError, value } = schema.validate(req[source], {
       abortEarly: false,
@@ -22,5 +22,3 @@ function validate(schema, source = 'body') {
     next();
   };
 }
-
-module.exports = validate;

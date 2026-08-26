@@ -1,6 +1,8 @@
-const Category = require('./category.model');
+import Category from './category.model.js';
+import Subcategory from '../subcategories/subcategory.model.js';
+import Product from '../products/product.model.js';
 
-async function listCategories({ activeOnly, limit, skip }) {
+export async function listCategories({ activeOnly, limit, skip }) {
   const filter = activeOnly ? { is_active: true } : {};
 
   const [data, total] = await Promise.all([
@@ -11,7 +13,7 @@ async function listCategories({ activeOnly, limit, skip }) {
   return { data, total };
 }
 
-async function getCategory(id) {
+export async function getCategory(id) {
   const category = await Category.findById(id);
   if (!category) {
     const err = new Error('Category not found');
@@ -21,7 +23,7 @@ async function getCategory(id) {
   return category;
 }
 
-async function createCategory({
+export async function createCategory({
   name_en,
   name_ar,
   image,
@@ -45,7 +47,7 @@ async function createCategory({
   });
 }
 
-async function updateCategory(id, updates) {
+export async function updateCategory(id, updates) {
   const current = await getCategory(id);
 
   if (updates.name_en || updates.name_ar) {
@@ -74,15 +76,34 @@ async function updateCategory(id, updates) {
   return { updated, oldPublicId: updates.image_public_id ? oldPublicId : null };
 }
 
-async function deactivateCategory(id) {
+export async function deactivateCategory(id) {
   await getCategory(id);
   return Category.findByIdAndUpdate(id, { is_active: false }, { new: true });
 }
 
-module.exports = {
-  listCategories,
-  getCategory,
-  createCategory,
-  updateCategory,
-  deactivateCategory,
-};
+export async function deleteCategory(id) {
+  await getCategory(id);
+
+  const subcategoriesCount = await Subcategory.countDocuments({
+    category_id: id,
+  });
+  if (subcategoriesCount > 0) {
+    const err = new Error(
+      `Cannot delete category: ${subcategoriesCount} subcategory(ies) still reference it. Delete or reassign them first.`,
+    );
+    err.statusCode = 409;
+    throw err;
+  }
+
+  const productsCount = await Product.countDocuments({ category_id: id });
+  if (productsCount > 0) {
+    const err = new Error(
+      `Cannot delete category: ${productsCount} product(s) still reference it. Delete or reassign them first.`,
+    );
+    err.statusCode = 409;
+    throw err;
+  }
+
+  const deleted = await Category.findByIdAndDelete(id);
+  return deleted;
+}

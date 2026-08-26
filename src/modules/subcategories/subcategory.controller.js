@@ -1,15 +1,12 @@
-const subcategoryService = require('./subcategory.service');
-const { success } = require('../../utils/response');
-const {
-  getPagination,
-  buildPaginationMeta,
-} = require('../../utils/pagination');
-const {
+import * as subcategoryService from './subcategory.service.js';
+import { success, error } from '../../utils/response.js';
+import { getPagination, buildPaginationMeta } from '../../utils/pagination.js';
+import {
   uploadToCloudinary,
   deleteFromCloudinary,
-} = require('../../utils/upload');
+} from '../../utils/upload.js';
 
-async function getAllSubcategories(req, res, next) {
+export async function getAllSubcategories(req, res, next) {
   try {
     const { categoryId, activeOnly } = req.query;
     const { page, limit, skip } = getPagination(req.query);
@@ -31,7 +28,7 @@ async function getAllSubcategories(req, res, next) {
   }
 }
 
-async function getSubcategoryById(req, res, next) {
+export async function getSubcategoryById(req, res, next) {
   try {
     const subcategory = await subcategoryService.getSubcategory(req.params.id);
     return success(res, {
@@ -43,7 +40,7 @@ async function getSubcategoryById(req, res, next) {
   }
 }
 
-async function createSubcategory(req, res, next) {
+export async function createSubcategory(req, res, next) {
   try {
     let image = null;
     let image_public_id = null;
@@ -70,7 +67,7 @@ async function createSubcategory(req, res, next) {
   }
 }
 
-async function updateSubcategory(req, res, next) {
+export async function updateSubcategory(req, res, next) {
   try {
     const updates = { ...req.body };
 
@@ -100,7 +97,7 @@ async function updateSubcategory(req, res, next) {
   }
 }
 
-async function activateSubcategory(req, res, next) {
+export async function activateSubcategory(req, res, next) {
   try {
     const subcategory = await subcategoryService.activateSubcategory(
       req.params.id,
@@ -114,7 +111,7 @@ async function activateSubcategory(req, res, next) {
   }
 }
 
-async function deactivateSubcategory(req, res, next) {
+export async function deactivateSubcategory(req, res, next) {
   try {
     const subcategory = await subcategoryService.deactivateSubcategory(
       req.params.id,
@@ -128,11 +125,21 @@ async function deactivateSubcategory(req, res, next) {
   }
 }
 
-module.exports = {
-  getAllSubcategories,
-  getSubcategoryById,
-  createSubcategory,
-  updateSubcategory,
-  activateSubcategory,
-  deactivateSubcategory,
-};
+export async function deleteSubcategory(req, res, next) {
+  try {
+    const deleted = await subcategoryService.deleteSubcategory(req.params.id);
+
+    if (deleted.image_public_id) {
+      deleteFromCloudinary(deleted.image_public_id).catch((e) =>
+        console.error('Cloudinary cleanup failed:', e.message),
+      );
+    }
+
+    return success(res, {
+      message: 'Subcategory deleted successfully',
+      data: null,
+    });
+  } catch (err) {
+    next(err);
+  }
+}

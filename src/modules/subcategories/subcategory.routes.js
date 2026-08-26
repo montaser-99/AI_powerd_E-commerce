@@ -1,21 +1,22 @@
-const express = require('express');
-const authenticate = require('../../middlewares/authenticate');
-const authorize = require('../../middlewares/authorize');
-const validate = require('../../middlewares/validate');
-const { upload } = require('../../utils/upload');
-const {
+import express from 'express';
+import authenticate from '../../middlewares/authenticate.js';
+import authorize from '../../middlewares/authorize.js';
+import validate from '../../middlewares/validate.js';
+import { upload } from '../../utils/upload.js';
+import {
   createSubcategorySchema,
   updateSubcategorySchema,
   idParamSchema,
-} = require('./subcategory.validation');
-const {
+} from './subcategory.validation.js';
+import {
   getAllSubcategories,
   getSubcategoryById,
   createSubcategory,
   updateSubcategory,
   activateSubcategory,
   deactivateSubcategory,
-} = require('./subcategory.controller');
+  deleteSubcategory,
+} from './subcategory.controller.js';
 
 const router = express.Router();
 
@@ -57,4 +58,12 @@ router.patch(
   deactivateSubcategory,
 );
 
-module.exports = router;
+router.delete(
+  '/:id',
+  authenticate,
+  authorize('SYSTEM_ADMINISTRATOR'),
+  validate(idParamSchema, 'params'),
+  deleteSubcategory,
+);
+
+export default router;

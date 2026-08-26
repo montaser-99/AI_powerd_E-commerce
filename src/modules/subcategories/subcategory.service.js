@@ -1,5 +1,6 @@
-const Subcategory = require('./subcategory.model');
-const Category = require('../categories/category.model');
+import Subcategory from './subcategory.model.js';
+import Category from '../categories/category.model.js';
+import Product from '../products/product.model';
 
 async function assertCategoryExists(categoryId) {
   const category = await Category.findById(categoryId);
@@ -11,7 +12,12 @@ async function assertCategoryExists(categoryId) {
   return category;
 }
 
-async function listSubcategories({ categoryId, activeOnly, limit, skip }) {
+export async function listSubcategories({
+  categoryId,
+  activeOnly,
+  limit,
+  skip,
+}) {
   const filter = {};
   if (categoryId) filter.category_id = categoryId;
   if (activeOnly) filter.is_active = true;
@@ -28,7 +34,7 @@ async function listSubcategories({ categoryId, activeOnly, limit, skip }) {
   return { data, total };
 }
 
-async function getSubcategory(id) {
+export async function getSubcategory(id) {
   const subcategory = await Subcategory.findById(id).populate(
     'category_id',
     'name_en name_ar',
@@ -41,7 +47,7 @@ async function getSubcategory(id) {
   return subcategory;
 }
 
-async function createSubcategory({
+export async function createSubcategory({
   category_id,
   name_en,
   name_ar,
@@ -73,7 +79,7 @@ async function createSubcategory({
   });
 }
 
-async function updateSubcategory(id, updates) {
+export async function updateSubcategory(id, updates) {
   const current = await getSubcategory(id);
 
   if (updates.category_id) {
@@ -109,7 +115,7 @@ async function updateSubcategory(id, updates) {
   return { updated, oldPublicId: updates.image_public_id ? oldPublicId : null };
 }
 
-async function setActiveStatus(id, isActive) {
+export async function setActiveStatus(id, isActive) {
   await getSubcategory(id);
   return Subcategory.findByIdAndUpdate(
     id,
@@ -118,11 +124,21 @@ async function setActiveStatus(id, isActive) {
   );
 }
 
-module.exports = {
-  listSubcategories,
-  getSubcategory,
-  createSubcategory,
-  updateSubcategory,
-  activateSubcategory: (id) => setActiveStatus(id, true),
-  deactivateSubcategory: (id) => setActiveStatus(id, false),
-};
+export const activateSubcategory = (id) => setActiveStatus(id, true);
+export const deactivateSubcategory = (id) => setActiveStatus(id, false);
+
+export async function deleteSubcategory(id) {
+  await getSubcategory(id);
+
+  const productsCount = await Product.countDocuments({ subcategory_id: id });
+  if (productsCount > 0) {
+    const err = new Error(
+      `Cannot delete subcategory: ${productsCount} product(s) still reference it. Delete or reassign them first.`,
+    );
+    err.statusCode = 409;
+    throw err;
+  }
+
+  const deleted = await Subcategory.findByIdAndDelete(id);
+  return deleted;
+}

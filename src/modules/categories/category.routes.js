@@ -1,20 +1,21 @@
-const express = require('express');
-const authenticate = require('../../middlewares/authenticate');
-const authorize = require('../../middlewares/authorize');
-const validate = require('../../middlewares/validate');
-const { upload } = require('../../utils/upload');
-const {
+import express from 'express';
+import authenticate from '../../middlewares/authenticate.js';
+import authorize from '../../middlewares/authorize.js';
+import validate from '../../middlewares/validate.js';
+import { upload } from '../../utils/upload.js';
+import {
   createCategorySchema,
   updateCategorySchema,
   idParamSchema,
-} = require('./category.validation');
-const {
+} from './category.validation.js';
+import {
   getAllCategories,
   getCategoryById,
   createCategory,
   updateCategory,
   deactivateCategory,
-} = require('./category.controller');
+  deleteCategory,
+} from './category.controller.js';
 
 const router = express.Router();
 
@@ -50,4 +51,12 @@ router.patch(
   deactivateCategory,
 );
 
-module.exports = router;
+router.delete(
+  '/:id',
+  authenticate,
+  authorize('SYSTEM_ADMINISTRATOR'),
+  validate(idParamSchema, 'params'),
+  deleteCategory,
+);
+
+export default router;

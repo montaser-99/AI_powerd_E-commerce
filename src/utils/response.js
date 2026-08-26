@@ -1,4 +1,4 @@
-function success(
+export function success(
   res,
   { statusCode = 200, message = 'Success', data = null, pagination = null },
 ) {
@@ -7,7 +7,7 @@ function success(
   return res.status(statusCode).json(body);
 }
 
-function error(
+export function error(
   res,
   { statusCode = 500, message = 'Something went wrong', errors = null },
 ) {
@@ -15,5 +15,3 @@ function error(
   if (errors) body.errors = errors;
   return res.status(statusCode).json(body);
 }
-
-module.exports = { success, error };

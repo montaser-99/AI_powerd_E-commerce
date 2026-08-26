@@ -1,7 +1,7 @@
-const multer = require('multer');
-const { error } = require('../utils/response');
+import multer from 'multer';
+import { error } from '../utils/response.js';
 
-function errorHandler(err, req, res, next) {
+export default function errorHandler(err, req, res, next) {
   if (err instanceof multer.MulterError) {
     return error(res, {
       statusCode: 400,
@@ -18,5 +18,3 @@ function errorHandler(err, req, res, next) {
     message: err.message || 'Internal server error',
   });
 }
-
-module.exports = errorHandler;
