@@ -1,6 +1,6 @@
 import Subcategory from './subcategory.model.js';
 import Category from '../categories/category.model.js';
-import Product from '../products/product.model';
+import Product from '../products/product.model.js';
 
 async function assertCategoryExists(categoryId) {
   const category = await Category.findById(categoryId);

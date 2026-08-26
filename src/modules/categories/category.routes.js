@@ -27,7 +27,6 @@ router.post(
   authenticate,
   authorize('SYSTEM_ADMINISTRATOR'),
   upload.single('image'),
-  createCategoryRules,
   validate(createCategorySchema, 'body'),
   createCategory,
 );
@@ -37,7 +36,6 @@ router.patch(
   authenticate,
   authorize('SYSTEM_ADMINISTRATOR'),
   upload.single('image'),
-  updateCategoryRules,
   validate(idParamSchema, 'params'),
   validate(updateCategorySchema, 'body'),
   updateCategory,
